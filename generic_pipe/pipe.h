@@ -3,6 +3,12 @@
 
 #include <utility>
 
+struct faucet {
+  constexpr faucet() = default;
+
+  template <typename T> constexpr auto operator()(T t) const { return t; }
+};
+
 template <typename L, typename R> class pipe {
 public:
   constexpr pipe(L lhs, R rhs) : lhs_{lhs}, rhs_{rhs} {}

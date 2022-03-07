@@ -38,7 +38,14 @@ bbb(int):
         sub     eax, 7
         ret
 ```
+
+
+
+<details>
+<summary>Update - below is fixed. gcc still generates functions body but inlines pipes call.</summary>
+
 Sadly chaining more functions breaks on gcc (still works as expected on clang). Test after adding one more function call:
+
 ```c++
 int aaa(int a)
 {
@@ -83,3 +90,4 @@ bbb(int):
         sub     eax, 3
         ret
 ```
+</details>

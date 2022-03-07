@@ -26,7 +26,6 @@ template<typename T> struct constant
     }
     const T val_;
 };
-} // namespace pipe
 
 template<typename L, typename R> class generic_pipe
 {
@@ -39,22 +38,17 @@ public:
 
     template<typename... T> constexpr auto operator()(T&&... args) const
     {
-        return call_rhs(lhs_(std::forward<T>(args)...));
+        return rhs_(lhs_(std::forward<T>(args)...));
     }
 
 private:
     L lhs_;
     R rhs_;
-
-    template<typename... T> constexpr auto call_rhs(T&&... args) const
-    {
-        return rhs_(std::forward<T>(args)...);
-    }
 };
 
 template<typename L, typename R> constexpr auto operator|(L&& lhs, R&& rhs)
 {
     return generic_pipe<L, R>(std::forward<L>(lhs), std::forward<R>(rhs));
 }
-
+} // namespace pipe
 #endif

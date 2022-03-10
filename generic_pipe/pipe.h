@@ -64,7 +64,10 @@ public:
 
     template<typename... T> constexpr auto operator()(T&&... args) const
     {
-        return rhs_(lhs_(std::forward<T>(args)...));
+        if constexpr (std::is_invocable_v<R, std::invoke_result_t<L, T...>>)
+            return rhs_(lhs_(std::forward<T>(args)...));
+        else
+            return std::apply(rhs_, lhs_(std::forward<T>(args)...));
     }
 
 private:

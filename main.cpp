@@ -21,6 +21,9 @@ int main()
             [](int a) { return a; }, //
             [](int a) { return a + 1; }, //
             [](int a) { return a + 2; }, //
-        };
-    return std::get<1>(p(4));
+        }
+        | [](int a, int b, int c) {
+              return a + b + c;
+          };
+    return p(0);
 }

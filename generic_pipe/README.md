@@ -3,6 +3,8 @@ After seeing pipes on ranges in C++20 I wanted to try doing something similar, b
 
 As I like idea of `constexpr` everything I imagined compiler would nicely inline and optimize each `constexpr` function call (as `constexpr` implies `inline`). It works up to a point.
 
+Based on one of great talks by [Michael Caisse](https://www.youtube.com/watch?v=OkeRijjmoh8)
+
 ```c++
 constexpr int fun(int a){return a+4;}
 constexpr int bun(int a){return a/2;}

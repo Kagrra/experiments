@@ -28,3 +28,25 @@ c.inc<event_type>(); // this workd as long as names are uniqe
 c.inc<int>(); // this works as long as types in named counter are unique
 ```
 and so far it's my only idea to actually use it in some shape or form.
+
+## get_type<static_string Name, typenem T>()
+
+My friend challanged me to write function returning `type` part of the `named_type` from any container using inheritance trick. I came up with this solution:
+```c++
+namespace details
+{
+template<static_string Name, typename T> auto get_type_impl()
+{
+    auto lam = [&]<typename U>(const named_type<Name, U>& n) {
+        struct ret
+        {
+            using type = U;
+        };
+        return ret {};
+    };
+    return lam(T {});
+}
+} // namespace details
+
+template<static_string Name, typename T> using get_type = decltype(details::get_type_impl<Name, T>())::type;
+```

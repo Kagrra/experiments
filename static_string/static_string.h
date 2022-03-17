@@ -65,4 +65,21 @@ private:
         return n.inc();
     }
 };
+
+namespace details
+{
+template<static_string Name, typename T> auto get_type_impl()
+{
+    auto lam = [&]<typename U>(const named_type<Name, U>& n) {
+        struct ret
+        {
+            using type = U;
+        };
+        return ret {};
+    };
+    return lam(T {});
+}
+} // namespace details
+
+template<static_string Name, typename T> using get_type = decltype(details::get_type_impl<Name, T>())::type;
 #endif

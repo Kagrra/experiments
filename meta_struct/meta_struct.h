@@ -8,12 +8,11 @@ template<typename... T> class meta_struct : T...
     constexpr meta_struct() = default;
 };
 
-template<static_string Name, typename... Members> constexpr auto& get(meta_struct<Members...>& m) noexcept
+template<static_string Name, typename T> constexpr decltype(auto) get(T&& m) noexcept
 {
-    auto cast = []<static_string N, typename U>(named_type<N, U>& n) {
+    return []<typename U>(named_type<Name, U>& n) -> decltype(auto) {
         return n;
-    };
-    return cast<Name>(m);
+    }(std::forward<T>(m));
 }
 
 template<typename Fun, typename... Members> constexpr decltype(auto) apply(Fun&& fun, counter<Members...>& c)
@@ -23,8 +22,7 @@ template<typename Fun, typename... Members> constexpr decltype(auto) apply(Fun&&
 
 template<typename Fun, typename... Members> constexpr void for_each(Fun&& fun, counter<Members...>& c)
 {
-    auto sink = []<typename... Sink>(Sink... s)->void {};
-    sink((std::forward<Fun>(fun)(static_cast<Members&>(c)), 0)...);
+    ((std::forward<Fun>(fun)(static_cast<Members&>(c))), ...);
 }
 
 namespace details

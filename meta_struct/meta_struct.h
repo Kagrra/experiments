@@ -15,12 +15,12 @@ template<static_string Name, typename T> constexpr decltype(auto) get(T&& m) noe
     }(std::forward<T>(m));
 }
 
-template<typename Fun, typename... Members> constexpr decltype(auto) apply(Fun&& fun, counter<Members...>& c)
+template<typename Fun, typename... Members> constexpr decltype(auto) apply(Fun&& fun, meta_struct<Members...>& c)
 {
     return std::forward<Fun>(fun)(static_cast<Members&>(c)...);
 }
 
-template<typename Fun, typename... Members> constexpr void for_each(Fun&& fun, counter<Members...>& c)
+template<typename Fun, typename... Members> constexpr void for_each(Fun&& fun, meta_struct<Members...>& c)
 {
     ((std::forward<Fun>(fun)(static_cast<Members&>(c))), ...);
 }

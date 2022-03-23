@@ -15,6 +15,8 @@ template<static_string Name, typename T> constexpr decltype(auto) get(T&& m) noe
     }(std::forward<T>(m));
 }
 
+template<size_t Index, typename... Members> constexpr auto& get(meta_struct<Members...>& m) noexcept { }
+
 template<typename Fun, typename... Members> constexpr decltype(auto) apply(Fun&& fun, meta_struct<Members...>& c)
 {
     return std::forward<Fun>(fun)(static_cast<Members&>(c)...);
@@ -29,14 +31,13 @@ namespace details
 {
 template<static_string Name, typename T> constexpr auto get_type_impl()
 {
-    auto lam = [&]<typename U>(const named_type<Name, U>& n) {
+    return [&]<typename U>(named_type<Name, U>* n) {
         struct ret
         {
             using type = U;
         };
         return ret {};
-    };
-    return lam(T {});
+    }(static_cast<T*>(nullptr));
 }
 } // namespace details
 

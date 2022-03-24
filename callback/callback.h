@@ -15,7 +15,23 @@ template<typename R, typename... Args> struct callback<R(Args...)>
     }
 };
 
-template<typename Base, typename R, typename... Args> struct callback<R (Base::*)(Args...)> : callback<R(Args...)>
+template<typename Base, typename R, typename... Args> //
+struct callback<R (Base::*)(Args...)> : callback<R(Args...)>
+{
+};
+
+template<typename Base, typename R, typename... Args> //
+struct callback<R (Base::*)(Args...) const> : callback<R(Args...)>
+{
+};
+
+template<typename Base, typename R, typename... Args> //
+struct callback<R (Base::*)(Args...) noexcept> : callback<R(Args...)>
+{
+};
+
+template<typename Base, typename R, typename... Args> //
+struct callback<R (Base::*)(Args...) const noexcept> : callback<R(Args...)>
 {
 };
 

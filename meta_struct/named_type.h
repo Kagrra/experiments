@@ -9,6 +9,10 @@ public:
     using type = T;
 
     constexpr named_type() = default;
+    constexpr named_type(T obj)
+        : value_ {obj}
+    {
+    }
 
     constexpr std::string_view name() const noexcept
     {
@@ -31,4 +35,15 @@ public:
 private:
     T value_ {};
 };
+
+template<static_string Name> struct arg_type
+{
+    template<typename T> constexpr decltype(auto) operator()(T value) const noexcept
+    {
+        return named_type<Name, T>(value);
+    }
+};
+
+template<static_string Name> constexpr inline arg_type<Name> arg {};
+
 #endif

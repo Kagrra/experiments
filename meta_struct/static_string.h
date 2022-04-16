@@ -2,6 +2,7 @@
 #define STATIC_STRING_H
 
 #include <algorithm>
+#include <cmath>
 #include <string_view>
 
 template<size_t Size> struct static_string
@@ -49,64 +50,4 @@ template<size_t Value> constexpr auto itoa()
 
     return static_string(data);
 }
-
-template<static_string Name, typename T> struct named_type
-{
-    using type = T;
-
-    constexpr std::string_view name() const noexcept
-    {
-        return Name.get();
-    }
-
-    constexpr void inc() noexcept
-    {
-        count++;
-    }
-    int count = 0;
-};
-
-template<typename... T> struct counter : T...
-{
-public:
-    constexpr counter() { }
-
-    template<static_string Name> constexpr int inc() noexcept
-    {
-        return inc_impl_name<Name>(*this);
-    }
-
-    template<typename Type> constexpr int inc() noexcept
-    {
-        return inc_impl_type<Type>(*this);
-    }
-
-private:
-    template<static_string Name, typename U> constexpr int inc_impl_name(named_counter<Name, U>& n)
-    {
-        return n.inc();
-    }
-
-    template<typename U, static_string Name> constexpr int inc_impl_type(named_counter<Name, U>& n)
-    {
-        return n.inc();
-    }
-};
-
-namespace details
-{
-template<static_string Name, typename T> constexpr auto get_type_impl()
-{
-    auto lam = [&]<typename U>(const named_type<Name, U>& n) {
-        struct ret
-        {
-            using type = U;
-        };
-        return ret {};
-    };
-    return lam(T {});
-}
-} // namespace details
-
-template<static_string Name, typename T> using get_type = decltype(details::get_type_impl<Name, T>())::type;
 #endif

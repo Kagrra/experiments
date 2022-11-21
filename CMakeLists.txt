@@ -13,3 +13,5 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 add_compile_options("$<$<COMPILE_LANG_AND_ID:CXX,GNU>:-Wall;-Werror;-Wno-attributes>")
 
 add_subdirectory(meta_struct)
+add_subdirectory(variant_sm)
+add_subdirectory(any_callable)
